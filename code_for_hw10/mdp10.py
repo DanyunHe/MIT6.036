@@ -105,7 +105,7 @@ def value(q, s):
     10
     """
     # Your code here
-    return max(q.get(s,'b'),q.get(s,'c'))
+    return max(q.get(s,a) for a in q.actions)
 
 # Given a state, return the action that is greedy with reespect to the
 # current definition of the q function
@@ -122,10 +122,7 @@ def greedy(q, s):
     'b'
     """
     # Your code here
-    if q.get(s,'b')>=q.get(s,'c'):
-        return 'b'
-    else:
-        return 'c'
+    return argmax(q.actions,lambda a:q.get(s,a))
 
 
 def epsilon_greedy(q, s, eps = 0.5):
@@ -142,11 +139,11 @@ def epsilon_greedy(q, s, eps = 0.5):
     'b'
     
     """
-    ddis=uniform_dist(['b','c'])
-    if random.random() < eps:  # True with prob eps, random action
-        return ddis.draw()
+    if random.random()<eps:
+        return uniform_dist(q.actions).draw()
     else:
-        return greedy(q,s)       
+        return greedy(q,s)
+         
 
 class TabularQ:
     def __init__(self, states, actions):
